@@ -9,7 +9,7 @@ import com.sabry.muhammed.botnavbar.fragment.OtherFunctionalityFragment;
 
 public class ExpandableFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    ExpandableFragmentPagerAdapter(FragmentManager fm) {
+    public ExpandableFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
