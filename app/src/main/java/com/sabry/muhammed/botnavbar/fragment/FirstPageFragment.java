@@ -11,14 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.sabry.muhammed.botnavbar.ButtonAdapter;
+import com.sabry.muhammed.botnavbar.adapter.ButtonAdapter;
 import com.sabry.muhammed.botnavbar.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class OtherFunctionalityFragment extends Fragment {
+/**
+ * Fragment class to show gridview containing some buttons
+ * it's supposed to be the first page in the ViewPager in the expandable navigation bar
+ */
+public class FirstPageFragment extends Fragment {
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +40,29 @@ public class OtherFunctionalityFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        GridView gridView = view.findViewById(R.id.mainGridView);
+        //Buttons Labels
         List<String> buttonNames = new ArrayList<>(6);
-        Collections.addAll(buttonNames, "65", "556", "5656", "Four565th", "F65ifth", "S65ixth");
-        List<Drawable> buttonDrawables = new ArrayList<>(6);
-        Drawable drawable = getResources().getDrawable(R.drawable.ic_close);
-        Collections.addAll(buttonDrawables, drawable, drawable, drawable, drawable, drawable, drawable);
-        gridView.setAdapter(new ButtonAdapter(this.getContext(), buttonNames, buttonDrawables));
-    }
+        Collections.addAll(buttonNames
+                , "History"
+                , "Downloads"
+                , "Full Screen"
+                , "dummy"
+                , "dummy"
+                , "dummy");
 
+        //Buttons Icons
+        List<Drawable> buttonDrawables = new ArrayList<>(6);
+        Collections.addAll(buttonDrawables
+                , getResources().getDrawable(R.drawable.ic_history)
+                , getResources().getDrawable(R.drawable.ic_downloads)
+                , getResources().getDrawable(R.drawable.ic_fullscreen)
+                , getResources().getDrawable(R.drawable.ic_dummy)
+                , getResources().getDrawable(R.drawable.ic_dummy)
+                , getResources().getDrawable(R.drawable.ic_dummy));
+
+        //GridView Instantiation
+        GridView gridView = view.findViewById(R.id.mainGridView);
+        gridView.setAdapter(new ButtonAdapter(this.getContext(), buttonNames, buttonDrawables));
+
+    }
 }

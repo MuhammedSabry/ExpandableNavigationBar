@@ -1,32 +1,43 @@
 package com.sabry.muhammed.botnavbar;
 
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-public class Util {
-    private int targetHeight ;
 
-    public void setTargetHeight(int targetHeight) {
-        this.targetHeight = targetHeight;
+/**
+ * Util class to help animate views
+ */
+public class Util {
+
+    private static final int DURATION = 450;
+    private static Animation animation;
+
+    /**
+     * Supposed to tell if the expandable view is animating or not
+     */
+    public static boolean isAnimating() {
+        return (animation != null && (!animation.hasEnded()));
     }
 
-    public static void expand(final View v) {
-        v.setVisibility(View.VISIBLE);
-        v.measure(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        v.requestLayout();
-        final int targetHeight = v.getMeasuredHeight();
+    /**
+     * Expands the view from 0 initial height till it's fully visible
+     */
+    public static void expand(final View view) {
+        //Getting the proper height we want to set the view height to
+        int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) view.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+        int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        view.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+        final int targetHeight = view.getMeasuredHeight();
 
-        Animation a = new Animation() {
+
+        view.getLayoutParams().height = 0;
+        view.setVisibility(View.VISIBLE);
+        animation = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height =
-                        (interpolatedTime == 1) ?
-                                WindowManager.LayoutParams.WRAP_CONTENT
-                                :
-                                (int) (targetHeight * interpolatedTime);
-                v.requestLayout();
+                view.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
+                view.requestLayout();
             }
 
             @Override
@@ -34,22 +45,26 @@ public class Util {
                 return true;
             }
         };
-        // 1dp/ms
-        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 4);
-        v.startAnimation(a);
+
+        animation.setDuration(DURATION);
+        view.startAnimation(animation);
     }
 
-    public static void collapse(final View v) {
-        final int initialHeight = v.getMeasuredHeight();
+    /**
+     * Collapses the given view until it's completely gone -> Height =0
+     * then sets it's visiblity to gone
+     */
+    public static void collapse(final View view) {
+        final int initialHeight = view.getMeasuredHeight();
 
-        Animation a = new Animation() {
+        animation = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 if (interpolatedTime == 1) {
-                    v.setVisibility(View.INVISIBLE);
+                    view.setVisibility(View.GONE);
                 } else {
-                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                    v.requestLayout();
+                    view.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    view.requestLayout();
                 }
             }
 
@@ -58,9 +73,7 @@ public class Util {
                 return true;
             }
         };
-        // 1dp/ms
-        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density) * 4);
-        v.startAnimation(a);
+        animation.setDuration(DURATION);
+        view.startAnimation(animation);
     }
-
 }

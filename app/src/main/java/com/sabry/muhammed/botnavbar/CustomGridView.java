@@ -4,6 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.GridView;
 
+/**
+ * Custom GridView wraps the original GridView and modifies it
+ * to make sure Wrap_Content works with it
+ */
 public class CustomGridView extends GridView {
     public CustomGridView(Context context) {
         super(context);
